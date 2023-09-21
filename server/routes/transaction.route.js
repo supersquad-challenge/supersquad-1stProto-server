@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
-const challenge = require('../controllers/challenge.controller');
+const tx = require('../controllers/tx.controller');
 
-router.get('/', challenge.getChallengeAll);
+router.post('/deposit', tx.receiveDeposit);
+router.post('/claim', tx.providePayback);
 
 module.exports = router;

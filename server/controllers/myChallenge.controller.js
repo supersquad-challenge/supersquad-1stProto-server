@@ -19,6 +19,8 @@ module.exports = {
       const userRegisterData = {
         depositMethod: userChallengeInfo.depositMethod,
         deposit: userChallengeInfo.deposit,
+        cashPayback: userChallengeInfo.cashPayback,
+        cryptoPayback: userChallengeInfo.cryptoPayback,
         verificationStatus: userChallengeInfo.verificationStatus,
         completeNum: userChallengeInfo.completeNum,
         successRate: userChallengeInfo.successRate,

@@ -4,6 +4,8 @@ var Schema = mongoose.Schema;
 const UserChallengeSchema = new Schema({
   depositMethod: String,
   deposit: Number,
+  cashPayback: Number,
+  cryptoPayback: Number,
   verificationStatus: { type: Schema.Types.Mixed },
   completeNum: Number,
   successRate: Number,
