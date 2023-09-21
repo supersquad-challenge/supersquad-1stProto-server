@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 const ChallengeInfoSchema = new Schema({
+  category: String,
   challengeName: String,
   joinChallengeStartsAt: Date,
   joinChallengeEndsAt: Date,

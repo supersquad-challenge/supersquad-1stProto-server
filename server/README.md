@@ -26,9 +26,3 @@ $ npm run start
 ```bash
 $ npm run start:dev
 ```
-
-### Daemon(트랜잭션 모니터링) 실행
-
-```bash
-$ npm run daemon
-```

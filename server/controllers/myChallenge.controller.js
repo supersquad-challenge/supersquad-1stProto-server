@@ -17,10 +17,18 @@ module.exports = {
       }
 
       const userRegisterData = {
-        userInfo_id: userChallengeInfo.userInfoId,
-        challenge_id: userChallengeInfo.challengeId,
         depositMethod: userChallengeInfo.depositMethod,
         deposit: userChallengeInfo.deposit,
+        verificationStatus: userChallengeInfo.verificationStatus,
+        completeNum: userChallengeInfo.completeNum,
+        successRate: userChallengeInfo.successRate,
+        isSuccess: userChallengeInfo.isSuccess,
+        totalPayback: userChallengeInfo.totalPayback,
+        profit: userChallengeInfo.profit,
+        challengeReward: userChallengeInfo.challengeReward,
+        cryptoYieldBoost: userChallengeInfo.cryptoYieldBoost,
+        userInfo_id: userChallengeInfo.userInfoId,
+        challenge_id: userChallengeInfo.challengeId,
       };
 
       const userChallengeData = await UserChallenge.create(userRegisterData);
@@ -39,14 +47,21 @@ module.exports = {
   getMyStatus: async (req, res) => {
     try {
       const userChallengeInfo = await UserChallenge.findById(req.params.userChallengeId);
+
+      if (!userChallengeInfo) {
+        return res.status(404).json({
+          error: 'User Challenge not found',
+        });
+      }
+
       const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challenge_id);
 
-      console.log(userChallengeInfo);
-      console.log(challengeInfo);
+      //console.log(userChallengeInfo);
+      //console.log(challengeInfo);
 
       res.status(200).json({
         message: 'My status found',
-        MyStatus: {
+        myStatus: {
           challengeId: challengeInfo._id,
           challengeName: challengeInfo.challengeName,
           challengeThumbnail: challengeInfo.challengeThumbnail,
@@ -66,6 +81,32 @@ module.exports = {
   },
   getTotalStatus: async (req, res) => {
     try {
+      const userChallengeInfo = await UserChallenge.findById(req.params.userChallengeId);
+
+      if (!userChallengeInfo) {
+        return res.status(404).json({
+          error: 'User Challenge not found',
+        });
+      }
+
+      const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challenge_id);
+
+      res.status(200).json({
+        message: 'Total status found',
+        totalStatus: {
+          challengeId: challengeInfo._id,
+          challengeName: challengeInfo.challengeName,
+          challengeThumbnail: challengeInfo.challengeThumbnail,
+          challengeParticipantsCount: challengeInfo.challengeParticipantsCount,
+          challengeTotalDeposit: challengeInfo.challengeTotalDeposit,
+          cashSuccessPool: 1000,
+          cashFailPool: 500,
+          challengeCryptoDeposit: challengeInfo.challengeCryptoDeposit,
+          cryptoSuccessPool: 40,
+          cryptoFailPool: 5,
+          cryptoYield: challengeInfo.cryptoYield,
+        },
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
@@ -75,6 +116,22 @@ module.exports = {
   },
   getPayback: async (req, res) => {
     try {
+      const userChallengeInfo = await UserChallenge.findById(req.params.userChallengeId);
+
+      if (!userChallengeInfo) {
+        return res.status(404).json({
+          error: 'User Challenge not found',
+        });
+      }
+      res.status(200).json({
+        message: 'Payback found',
+        payback: {
+          totalPayback: userChallengeInfo.totalPayback,
+          profit: userChallengeInfo.profit,
+          challengeReward: userChallengeInfo.challengeReward,
+          cryptoYieldBoost: userChallengeInfo.cryptoYieldBoost,
+        },
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
