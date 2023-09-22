@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const challenge = require('../controllers/challenge.controller');
+const verify = require('../controllers/verify.controller');
 
-router.get('/', challenge.getChallengeAll);
+router.post('/postPhoto', verify.postPhoto);
+router.post('/verifyPhoto', verify.verifyPhoto);
+router.get('/', verify.getAllPhotos);
+router.get('/:verificationPhotoId', verify.getPhotoById);
 
 module.exports = router;
