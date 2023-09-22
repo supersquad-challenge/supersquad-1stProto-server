@@ -1,5 +1,6 @@
 const multer = require('multer');
 const fs = require('fs');
+const path = require('path');
 
 const ChallengeInfo = require('../models/challengeInfo.model');
 const UserChallenge = require('../models/userChallenge.model');
@@ -102,6 +103,22 @@ module.exports = {
   },
   getAllPhotos: async (req, res) => {
     try {
+      const userChallengeId = req.params.userChallengeId;
+
+      const verificationInfo = await VerificationPhoto.find({
+        userChallenge_id: userChallengeId,
+      });
+
+      if (!verificationInfo) {
+        return res.status(404).json({
+          error: 'Verification Photo not found',
+        });
+      }
+
+      res.status(200).json({
+        message: 'Verification Photo found',
+        verificationInfo: verificationInfo,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
@@ -111,6 +128,17 @@ module.exports = {
   },
   getPhotoById: async (req, res) => {
     try {
+      const filename = req.params.filename;
+
+      const filePath = path.join(__dirname, '../public/veriPhoto/', filename);
+
+      if (fs.existsSync(filePath)) {
+        const fileStream = fs.createReadStream(filePath);
+        res.setHeader('Content-Type', 'image/jpeg');
+        fileStream.pipe(res);
+      } else {
+        res.status(404).json({ error: 'File not found.' });
+      }
     } catch (error) {
       console.log(error);
       res.status(500).json({
