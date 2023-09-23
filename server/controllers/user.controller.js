@@ -1,8 +1,5 @@
-const ChallengeInfo = require('../models/challengeInfo.model');
-const UserChallenge = require('../models/userChallenge.model');
-
 module.exports = {
-  createChallenge: async (req, res) => {
+  createUser: async (req, res) => {
     try {
     } catch (error) {
       console.log(error);

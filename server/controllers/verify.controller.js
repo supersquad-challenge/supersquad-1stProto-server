@@ -2,11 +2,9 @@ const multer = require('multer');
 const fs = require('fs');
 const path = require('path');
 
-const ChallengeInfo = require('../models/challengeInfo.model');
-const UserChallenge = require('../models/userChallenge.model');
 const VerificationPhoto = require('../models/verificationPhoto.model');
 
-// diskStorage를 사용할 경우
+// diskStorages
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, './public/veriPhoto/');
