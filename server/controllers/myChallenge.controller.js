@@ -17,18 +17,18 @@ module.exports = {
       }
 
       const userRegisterData = {
-        depositMethod: userChallengeInfo.depositMethod,
-        deposit: userChallengeInfo.deposit,
-        cashPayback: userChallengeInfo.cashPayback,
-        cryptoPayback: userChallengeInfo.cryptoPayback,
-        verificationStatus: userChallengeInfo.verificationStatus,
-        completeNum: userChallengeInfo.completeNum,
-        successRate: userChallengeInfo.successRate,
-        isSuccess: userChallengeInfo.isSuccess,
-        totalPayback: userChallengeInfo.totalPayback,
-        profit: userChallengeInfo.profit,
-        challengeReward: userChallengeInfo.challengeReward,
-        cryptoYieldBoost: userChallengeInfo.cryptoYieldBoost,
+        depositMethod: '',
+        deposit: 0,
+        completeNum: 14,
+        successRate: 100,
+        isSuccess: false,
+        totalPayback: 0,
+        cashPayback: 0,
+        cryptoPayback: 0,
+        profit: 0,
+        challengeReward: 0,
+        receivedYieldAmount: 0,
+        cryptoYieldBoost: 0,
         userInfo_id: userChallengeInfo.userInfoId,
         challenge_id: userChallengeInfo.challengeId,
       };
@@ -65,13 +65,9 @@ module.exports = {
         message: 'My status found',
         myStatus: {
           challengeId: challengeInfo._id,
-          challengeName: challengeInfo.challengeName,
-          challengeThumbnail: challengeInfo.challengeThumbnail,
-          challengeParticipantsCount: challengeInfo.challengeParticipantsCount,
-          challengeTotalDeposit: challengeInfo.challengeTotalDeposit,
           successRate: userChallengeInfo.successRate,
           deposit: userChallengeInfo.deposit,
-          completeNum: userChallengeInfo.completeNum,
+          challengeStatus: challengeInfo.challengeStatus,
         },
       });
     } catch (error) {
@@ -93,21 +89,22 @@ module.exports = {
 
       const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challenge_id);
 
+      const cryptoYieldBoostAmount =
+        challengeInfo.challengeCryptoDeposit * challengeInfo.cryptoYield * 0.01;
+      const totalStatus = {
+        challengeId: challengeInfo._id,
+        challengeTotalDeposit: challengeInfo.challengeTotalDeposit,
+        cryptoYieldBoost: cryptoYieldBoostAmount,
+        cashSuccessPool: challengeInfo.cashSuccessPool,
+        cashFailPool: challengeInfo.cashFailPool,
+        challengeCryptoDeposit: challengeInfo.challengeCryptoDeposit,
+        cryptoSuccessPool: challengeInfo.cryptoSuccessPool,
+        cryptoFailPool: challengeInfo.cryptoFailPool,
+      };
+
       res.status(200).json({
         message: 'Total status found',
-        totalStatus: {
-          challengeId: challengeInfo._id,
-          challengeName: challengeInfo.challengeName,
-          challengeThumbnail: challengeInfo.challengeThumbnail,
-          challengeParticipantsCount: challengeInfo.challengeParticipantsCount,
-          challengeTotalDeposit: challengeInfo.challengeTotalDeposit,
-          cashSuccessPool: 1000,
-          cashFailPool: 500,
-          challengeCryptoDeposit: challengeInfo.challengeCryptoDeposit,
-          cryptoSuccessPool: 40,
-          cryptoFailPool: 5,
-          cryptoYield: challengeInfo.cryptoYield,
-        },
+        totalStatus,
       });
     } catch (error) {
       console.log(error);

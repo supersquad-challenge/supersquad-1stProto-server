@@ -28,6 +28,7 @@ const googleStrategyConfig = new GoogleStrategy(
         email: profile.emails[0].value,
         googleID: profile.id,
         name: profile.displayName,
+        nickname: '',
         picture: profile.photos[0].value,
         locale: profile._json.locale,
         isCookieAllowed: true,

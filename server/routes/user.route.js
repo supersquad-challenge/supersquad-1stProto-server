@@ -1,8 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const challenge = require('../controllers/challenge.controller');
+const user = require('../controllers/user.controller');
 
-router.get('/', challenge.getChallengeAll);
+router.post('/nickname', user.registerUserName);
+router.post('/address', user.registerAddress);
+router.get('/:userInfoId', user.getUserInfo);
+router.post('/create', user.createUser);
 
 module.exports = router;

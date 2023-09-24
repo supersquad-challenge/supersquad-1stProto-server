@@ -3,6 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const VerificationPhoto = require('../models/verificationPhoto.model');
+const UserChallenge = require('../models/userChallenge.model');
+const ChallengeInfo = require('../models/challengeInfo.model');
 
 // diskStorages
 const storage = multer.diskStorage({
@@ -39,7 +41,7 @@ module.exports = {
           verificationPhoto: veriPhotoInfo.path,
           uploadedAt: Date.now(),
           adminCheckedAt: null,
-          adminCheckStatus: null,
+          adminCheckStatus: 'notChecked',
           userChallenge_id: userChallengeId,
         });
 
@@ -79,9 +81,64 @@ module.exports = {
           adminCheckedAt: Date.now(),
           adminCheckStatus: verificationInfo.adminCheckStatus,
         },
-        {
-          new: true,
+        { new: true }
+      );
+
+      const userChallenge = await UserChallenge.findById(
+        verificationPhoto.userChallenge_id
+      );
+
+      const challengeInfo = await ChallengeInfo.findById(userChallenge.challenge_id);
+
+      let status;
+      if (verificationInfo.adminCheckStatus === 'approved') {
+        status = true;
+      } else {
+        status = false;
+        userChallenge.completeNum = userChallenge.completeNum - 1;
+      }
+
+      const checkSuccessRate =
+        (userChallenge.completeNum / challengeInfo.challengeTotalVerificationNum) * 100;
+
+      if (checkSuccessRate === 100) {
+        userChallenge.successStatus = 'success';
+      } else if (checkSuccessRate >= 80) {
+        userChallenge.successStatus = 'finish';
+      } else {
+        userChallenge.successStatus = 'fail';
+        if (userChallenge.depositMethod === 'crypto') {
+          userChallenge.cryptoPayback =
+            userChallenge.deposit *
+            (userChallenge.completeNum / challengeInfo.challengeRequiredCompleteNum);
+        } else if (userChallenge.depositMethod === 'cash') {
+          userChallenge.cashPayback =
+            userChallenge.deposit *
+            (userChallenge.completeNum / challengeInfo.challengeRequiredCompleteNum);
         }
+      }
+
+      const updatedUserChallenge = await UserChallenge.findByIdAndUpdate(
+        verificationPhoto.userChallenge_id,
+        {
+          $set: {
+            [`verificationStatus.${verificationInfo.date.toString()}`]: status,
+            completeNum: userChallenge.completeNum,
+            successRate: checkSuccessRate,
+            successStatus: userChallenge.successStatus,
+          },
+        },
+        { new: true }
+      );
+
+      const updatedChallengeInfo = await ChallengeInfo.findByIdAndUpdate(
+        userChallenge.challenge_id,
+        {
+          $set: {
+            challengeParticipantsCount: challengeInfo.challengeParticipantsCount + 1,
+          },
+        },
+        { new: true }
       );
 
       res.status(200).json({
@@ -90,6 +147,9 @@ module.exports = {
           adminCheckStatus: updatedVerificationPhoto.adminCheckStatus,
           adminCheckedAt: updatedVerificationPhoto.adminCheckedAt,
           userChallengeId: updatedVerificationPhoto.userChallenge_id,
+          successRate: updatedUserChallenge.successRate,
+          isSuccess: updatedUserChallenge.isSuccess,
+          verificationStatus: updatedUserChallenge.verificationStatus,
         },
       });
     } catch (error) {
