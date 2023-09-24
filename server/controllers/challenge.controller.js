@@ -8,13 +8,16 @@ module.exports = {
 
       const challenges = challengeInfo.map((info) => ({
         challengeId: info._id,
+        challengeStatus: info.challengeStatus,
         category: info.category,
+        challengeThumbnail: info.challengeThumbnail,
+        challengeStatus: info.challengeStatus,
+        challengeVerificationFrequency: info.challengeVerificationFrequency,
         challengeName: info.challengeName,
         challengeStartsAt: info.challengeStartsAt,
         challengeEndsAt: info.challengeEndsAt,
         challengeParticipantsCount: info.challengeParticipantsCount,
         challengeTotalDeposit: info.challengeTotalDeposit,
-        challengeThumbnail: info.challengeThumbnail,
       }));
 
       res.status(200).json({
@@ -43,15 +46,15 @@ module.exports = {
         message: 'Challenge found',
         challengeInfo: {
           challengeId: challengeInfo._id,
+          challengeThumbnail: challengeInfo.challengeThumbnail,
+          challengeVerificationFrequency: challengeInfo.challengeVerificationFrequency,
           challengeName: challengeInfo.challengeName,
           challengeParticipantsCount: challengeInfo.challengeParticipantsCount,
           challengeTotalDeposit: challengeInfo.challengeTotalDeposit,
           challengeStartsAt: challengeInfo.challengeStartsAt,
           challengeEndsAt: challengeInfo.challengeEndsAt,
           challengeVerificationMethod: challengeInfo.challengeVerificationMethod,
-          challengeVerificationFrequency: challengeInfo.challengeVerificationFrequency,
           cryptoYield: challengeInfo.cryptoYield,
-          challengeThumbnail: challengeInfo.challengeThumbnail,
         },
       });
     } catch (error) {

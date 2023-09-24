@@ -8,10 +8,12 @@ const UserInfoSchema = new Schema({
   },
   googleId: String,
   name: String,
+  nickname: String,
   picture: String,
   locale: String,
   isCookieAllowed: Boolean,
   role: String,
+  address: String,
   createdAt: { type: Date, default: Date.now },
 });
 
