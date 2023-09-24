@@ -7,12 +7,12 @@ module.exports = {
       const userChallengeInfo = req.body;
 
       const userChallenge = await UserChallenge.findOne({
-        challenge_id: userChallengeInfo.challengeId,
+        userInfo_id: userChallengeInfo.userInfoId,
       });
 
       if (userChallenge) {
         return res.status(409).json({
-          error: 'Challenge already registered',
+          error: 'My challenge already registered',
         });
       }
 

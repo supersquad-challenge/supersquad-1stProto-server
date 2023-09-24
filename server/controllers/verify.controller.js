@@ -167,7 +167,8 @@ module.exports = {
         userChallenge_id: userChallengeId,
       });
 
-      if (!verificationInfo) {
+      //console.log(verificationInfo);
+      if (!verificationInfo || verificationInfo.length === 0) {
         return res.status(404).json({
           error: 'Verification Photo not found',
         });
@@ -184,7 +185,7 @@ module.exports = {
       });
     }
   },
-  getPhotoById: async (req, res) => {
+  getPhotoByFilename: async (req, res) => {
     try {
       const filename = req.params.filename;
 
