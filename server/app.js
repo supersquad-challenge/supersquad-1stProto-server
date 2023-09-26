@@ -13,7 +13,7 @@ require('dotenv').config();
 
 app.use(
   session({
-    secret: 'my-secret-key',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
   })
