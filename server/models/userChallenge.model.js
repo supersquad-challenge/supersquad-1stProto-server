@@ -12,6 +12,7 @@ const UserChallengeSchema = new Schema({
   profit: Number,
   challengeReward: Number,
   receivedYieldAmount: Number,
+  claimChallenge: Boolean,
   userInfo_id: String,
   challenge_id: String,
 });

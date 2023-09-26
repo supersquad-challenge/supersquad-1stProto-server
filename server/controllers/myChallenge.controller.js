@@ -28,6 +28,7 @@ module.exports = {
         profit: 0,
         challengeReward: 0,
         receivedYieldAmount: 0,
+        claimChallenge: false,
         userInfo_id: userChallengeInfo.userInfoId,
         challenge_id: userChallengeInfo.challengeId,
       };
@@ -115,7 +116,6 @@ module.exports = {
   getPayback: async (req, res) => {
     try {
       const userChallengeInfo = await UserChallenge.findById(req.params.userChallengeId);
-      const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challenge_id);
 
       if (!userChallengeInfo) {
         return res.status(404).json({
@@ -123,16 +123,17 @@ module.exports = {
         });
       }
 
+      const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challenge_id);
       if (userChallengeInfo.depositMethod === 'cash') {
         let profit = 0;
 
         if (userChallengeInfo.successRate === 100) {
           userChallengeInfo.totalPayback =
             userChallengeInfo.deposit +
-            (ChallengeInfo.cashFailPool * 0.6 * userChallengeInfo.deposit) /
-              ChallengeInfo.challengeCashDeposit;
+            (challengeInfo.cashFailPool * 0.6 * userChallengeInfo.deposit) /
+              challengeInfo.challengeCashDeposit;
           profit = userChallengeInfo.totalPayback - userChallengeInfo.deposit;
-        } else if (userChallengeInfo.successRate > 80) {
+        } else if (userChallengeInfo.successRate >= 80) {
           userChallengeInfo.totalPayback = userChallengeInfo.deposit;
         } else {
           userChallengeInfo.totalPayback =
@@ -170,23 +171,27 @@ module.exports = {
           challengeInfo.cryptoYield *
           0.01 *
           (challengeInfo.challengeTotalVerificationNum / 365);
+        let challengeReward =
+          (challengeInfo.cryptoFailPool * 0.6 * userChallengeInfo.deposit) /
+          challengeInfo.challengeCryptoDeposit;
 
         if (userChallengeInfo.successRate === 100) {
           userChallengeInfo.totalPayback =
-            userChallengeInfo.deposit +
-            (challengeInfo.cryptoFailPool * 0.6 * userChallengeInfo.deposit) /
-              challengeInfo.challengeCryptoDeposit +
-            userChallengeInfo.receivedYieldAmount;
+            userChallengeInfo.deposit + challengeReward + receivedYieldAmount;
 
           profit = userChallengeInfo.totalPayback - userChallengeInfo.deposit;
-        } else if (userChallengeInfo > 80) {
+        } else if (userChallengeInfo.successRate >= 80) {
           userChallengeInfo.totalPayback =
-            userChallengeInfo.deposit + userChallengeInfo.receivedYieldAmount;
+            userChallengeInfo.deposit + receivedYieldAmount;
+
+          profit = userChallengeInfo.totalPayback - userChallengeInfo.deposit;
+          challengeReward = 0;
         } else {
           userChallengeInfo.totalPayback =
             userChallengeInfo.deposit *
             (userChallengeInfo.completeNum / challengeInfo.challengeRequiredCompleteNum);
           receivedYieldAmount = 0;
+          challengeReward = 0;
         }
 
         const userChallengeData = await UserChallenge.findByIdAndUpdate(
@@ -195,7 +200,7 @@ module.exports = {
             $set: {
               totalPayback: userChallengeInfo.totalPayback,
               profit: profit,
-              challengeReward: (profit / userChallengeInfo.deposit) * 100,
+              challengeReward: (challengeReward / userChallengeInfo.deposit) * 100,
               receivedYieldAmount: receivedYieldAmount,
             },
           },

@@ -99,12 +99,16 @@ module.exports = {
       let status;
       if (verificationInfo.adminCheckStatus === 'approved') {
         status = true;
-      } else {
+      } else if (verificationInfo.adminCheckStatus === 'rejected') {
         status = false;
         userChallenge.completeNum = userChallenge.completeNum - 1;
         if (userChallenge.completeNum < 0) {
           userChallenge.completeNum = 0;
         }
+      } else {
+        return res.status(400).json({
+          error: 'Wrong adminCheckStatus',
+        });
       }
 
       const checkSuccessRate =

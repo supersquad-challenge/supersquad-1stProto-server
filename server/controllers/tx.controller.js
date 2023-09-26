@@ -104,6 +104,7 @@ module.exports = {
         {
           $set: {
             isSuccess: userChallenge.isSuccess,
+            claimChallenge: true,
           },
         },
         { new: true }
@@ -114,6 +115,8 @@ module.exports = {
         paybackInfo: {
           successRate: updatedUserChallenge.successRate,
           isSuccess: updatedUserChallenge.isSuccess,
+          totalPayback: updatedUserChallenge.totalPayback,
+          claimChallenge: updatedUserChallenge.claimChallenge,
         },
       });
     } catch (error) {
