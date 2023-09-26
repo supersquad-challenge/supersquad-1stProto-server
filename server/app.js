@@ -22,7 +22,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/static', express.static(path.join(__dirname, 'public')));
+//app.use('/static', express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -30,7 +31,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'http://localhost:5500', 'http://52.65.222.108/'],
+    origin: ['http://localhost:3000', 'http://52.65.222.108/'],
     credentials: true,
   })
 );

@@ -12,7 +12,7 @@ router.get(
   '/google/callback',
   passport.authenticate('google', {
     successReturnToOrRedirect: '/challenge',
-    failureRedirect: '/login',
+    failureRedirect: '/',
     session: false,
   })
 );

@@ -75,6 +75,12 @@ module.exports = {
         });
       }
 
+      if (verificationPhoto.adminCheckStatus !== 'notChecked') {
+        return res.status(400).json({
+          error: 'Verification Photo already checked',
+        });
+      }
+
       const updatedVerificationPhoto = await VerificationPhoto.findByIdAndUpdate(
         verificationInfo.verificationPhotoId,
         {
@@ -96,11 +102,20 @@ module.exports = {
       } else {
         status = false;
         userChallenge.completeNum = userChallenge.completeNum - 1;
+        if (userChallenge.completeNum < 0) {
+          userChallenge.completeNum = 0;
+        }
       }
 
       const checkSuccessRate =
         (userChallenge.completeNum / challengeInfo.challengeTotalVerificationNum) * 100;
 
+      const slashDeposit =
+        userChallenge.deposit / challengeInfo.challengeRequiredCompleteNum;
+
+      let slashCryptoFail = 0,
+        slashCashFail = 0;
+      // 성공률 % 기준
       if (checkSuccessRate === 100) {
         userChallenge.successStatus = 'success';
       } else if (checkSuccessRate >= 80) {
@@ -108,13 +123,39 @@ module.exports = {
       } else {
         userChallenge.successStatus = 'fail';
         if (userChallenge.depositMethod === 'crypto') {
-          userChallenge.cryptoPayback =
-            userChallenge.deposit *
-            (userChallenge.completeNum / challengeInfo.challengeRequiredCompleteNum);
+          slashCryptoFail = challengeInfo.cryptoFailPool + slashDeposit;
+
+          if (slashCryptoFail > userChallenge.deposit) {
+            slashCryptoFail = userChallenge.deposit;
+          }
+
+          const updatedChallengeInfo = await ChallengeInfo.findByIdAndUpdate(
+            userChallenge.challenge_id,
+            {
+              $set: {
+                cryptoFailPool: slashCryptoFail,
+                cryptoSuccessPool: challengeInfo.challengeCryptoDeposit - slashCryptoFail,
+              },
+            },
+            { new: true }
+          );
         } else if (userChallenge.depositMethod === 'cash') {
-          userChallenge.cashPayback =
-            userChallenge.deposit *
-            (userChallenge.completeNum / challengeInfo.challengeRequiredCompleteNum);
+          slashCashFail = challengeInfo.cashFailPool + slashDeposit;
+
+          if (slashCashFail > userChallenge.deposit) {
+            slashCashFail = userChallenge.deposit;
+          }
+
+          const updatedChallengeInfo = await ChallengeInfo.findByIdAndUpdate(
+            userChallenge.challenge_id,
+            {
+              $set: {
+                cashFailPool: slashCashFail,
+                cashSuccessPool: challengeInfo.challengeCashDeposit - slashCashFail,
+              },
+            },
+            { new: true }
+          );
         }
       }
 
@@ -126,16 +167,6 @@ module.exports = {
             completeNum: userChallenge.completeNum,
             successRate: checkSuccessRate,
             successStatus: userChallenge.successStatus,
-          },
-        },
-        { new: true }
-      );
-
-      const updatedChallengeInfo = await ChallengeInfo.findByIdAndUpdate(
-        userChallenge.challenge_id,
-        {
-          $set: {
-            challengeParticipantsCount: challengeInfo.challengeParticipantsCount + 1,
           },
         },
         { new: true }

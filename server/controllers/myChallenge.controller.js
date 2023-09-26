@@ -10,6 +10,8 @@ module.exports = {
         userInfo_id: userChallengeInfo.userInfoId,
       });
 
+      const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challengeId);
+
       if (userChallenge) {
         return res.status(409).json({
           error: 'My challenge already registered',
@@ -19,7 +21,7 @@ module.exports = {
       const userRegisterData = {
         depositMethod: '',
         deposit: 0,
-        completeNum: 14,
+        completeNum: challengeInfo.challengeTotalVerificationNum,
         successRate: 100,
         isSuccess: false,
         totalPayback: 0,
