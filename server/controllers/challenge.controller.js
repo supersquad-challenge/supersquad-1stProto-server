@@ -4,7 +4,29 @@ module.exports = {
   getChallengeAll: async (req, res) => {
     try {
       const challengeInfo = await ChallengeInfo.find({});
-      //console.log(challengeInfo);
+
+      const today = new Date().getTime();
+      const timestamps = challengeInfo.map((info) => ({
+        startsAt: new Date(info.challengeStartsAt).getTime(),
+        endsAt: new Date(info.challengeEndsAt).getTime(),
+      }));
+
+      for (let i = 0; i < challengeInfo.length; i++) {
+        if (timestamps[i].startsAt > today) {
+          challengeInfo[i].challengeStatus = 'notStarted';
+        } else if (timestamps[i].endsAt < today) {
+          challengeInfo[i].challengeStatus = 'finished';
+        } else {
+          challengeInfo[i].challengeStatus = 'onGoing';
+        }
+      }
+
+      // Update the challengeInfo objects in the database
+      for (let i = 0; i < challengeInfo.length; i++) {
+        const query = { _id: challengeInfo[i]._id };
+        const update = { $set: { challengeStatus: challengeInfo[i].challengeStatus } };
+        await ChallengeInfo.updateOne(query, update);
+      }
 
       const challenges = challengeInfo.map((info) => ({
         challengeId: info._id,
