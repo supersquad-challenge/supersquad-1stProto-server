@@ -88,6 +88,14 @@ module.exports = {
     try {
       const { email, nickname, address } = req.body;
 
+      const userInfo = await UserInfo.findOne({ email: email });
+
+      if (userInfo) {
+        return res.status(409).json({
+          error: 'User already exists',
+        });
+      }
+
       const userRegisterData = {
         email: email,
         nickname: nickname,

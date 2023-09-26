@@ -99,12 +99,16 @@ module.exports = {
       let status;
       if (verificationInfo.adminCheckStatus === 'approved') {
         status = true;
-      } else {
+      } else if (verificationInfo.adminCheckStatus === 'rejected') {
         status = false;
         userChallenge.completeNum = userChallenge.completeNum - 1;
         if (userChallenge.completeNum < 0) {
           userChallenge.completeNum = 0;
         }
+      } else {
+        return res.status(400).json({
+          error: 'Wrong adminCheckStatus',
+        });
       }
 
       const checkSuccessRate =
@@ -116,12 +120,7 @@ module.exports = {
       let slashCryptoFail = 0,
         slashCashFail = 0;
       // 성공률 % 기준
-      if (checkSuccessRate === 100) {
-        userChallenge.successStatus = 'success';
-      } else if (checkSuccessRate >= 80) {
-        userChallenge.successStatus = 'finish';
-      } else {
-        userChallenge.successStatus = 'fail';
+      if (checkSuccessRate < 80) {
         if (userChallenge.depositMethod === 'crypto') {
           slashCryptoFail = challengeInfo.cryptoFailPool + slashDeposit;
 
@@ -166,7 +165,6 @@ module.exports = {
             [`verificationStatus.${verificationInfo.date.toString()}`]: status,
             completeNum: userChallenge.completeNum,
             successRate: checkSuccessRate,
-            successStatus: userChallenge.successStatus,
           },
         },
         { new: true }
@@ -179,7 +177,6 @@ module.exports = {
           adminCheckedAt: updatedVerificationPhoto.adminCheckedAt,
           userChallengeId: updatedVerificationPhoto.userChallenge_id,
           successRate: updatedUserChallenge.successRate,
-          isSuccess: updatedUserChallenge.isSuccess,
           verificationStatus: updatedUserChallenge.verificationStatus,
         },
       });

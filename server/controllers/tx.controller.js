@@ -95,32 +95,28 @@ module.exports = {
         });
       }
 
-      // if (userChallenge.depositMethod === 'cash') {
-      // } else if (userChallenge.depositMethod === 'crypto') {
-      //   const recievedYield =
-      //     (claimInfo.recievedYieldAmount / userChallenge.deposit) * 100;
-      //   const successPrize = 20;
-      // }
+      if (userChallenge.successRate >= 80) {
+        userChallenge.isSuccess = true;
+      }
 
-      // const updatedUserChallenge = await UserChallenge.findByIdAndUpdate(
-      //   claimInfo.userChallengeId,
-      //   {
-      //     $set: {
-      //       deposit: 0,
-      //       cashPayback: claimInfo.recievedYieldAmount,
-      //     },
-      //   },
-      //   { new: true }
-      // );
+      const updatedUserChallenge = await UserChallenge.findByIdAndUpdate(
+        claimInfo.userChallengeId,
+        {
+          $set: {
+            isSuccess: userChallenge.isSuccess,
+            claimChallenge: true,
+          },
+        },
+        { new: true }
+      );
 
       res.status(200).json({
         message: 'Payback provided',
         paybackInfo: {
-          successRate: userChallenge.successRate,
-          totalPayback: 312,
-          profit: 12,
-          challengeReward: 5,
-          cryptoYieldBoost: 1.86,
+          successRate: updatedUserChallenge.successRate,
+          isSuccess: updatedUserChallenge.isSuccess,
+          totalPayback: updatedUserChallenge.totalPayback,
+          claimChallenge: updatedUserChallenge.claimChallenge,
         },
       });
     } catch (error) {
