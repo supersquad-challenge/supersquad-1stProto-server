@@ -4,7 +4,7 @@ const routes = require('./routes');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
 
 const mongoose = require('mongoose');
 const passport = require('passport');
@@ -12,12 +12,27 @@ const passport = require('passport');
 require('dotenv').config();
 
 app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
+  cookieSession({
+    name: 'cookie-session',
+    keys: [process.env.SESSION_SECRET],
+    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 1 month
   })
 );
+
+// cookie-session 0.6.0 오류로 인해 추가
+app.use(function (req, res, next) {
+  if (req.session && !req.session.regenerate) {
+    req.session.regenerate = (cb) => {
+      cb();
+    };
+  }
+  if (req.session && !req.session.save) {
+    req.session.save = (cb) => {
+      cb();
+    };
+  }
+  next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
