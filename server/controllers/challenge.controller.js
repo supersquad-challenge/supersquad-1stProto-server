@@ -13,11 +13,11 @@ module.exports = {
 
       for (let i = 0; i < challengeInfo.length; i++) {
         if (timestamps[i].startsAt > today) {
-          challengeInfo[i].challengeStatus = 'notStarted';
+          challengeInfo[i].challengeStatus = 'onApplication';
         } else if (timestamps[i].endsAt < today) {
           challengeInfo[i].challengeStatus = 'finished';
         } else {
-          challengeInfo[i].challengeStatus = 'onGoing';
+          challengeInfo[i].challengeStatus = 'ongoing';
         }
       }
 
