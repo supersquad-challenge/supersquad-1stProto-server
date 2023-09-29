@@ -54,6 +54,31 @@ module.exports = {
       });
     }
   },
+  getAllMychallenge: async (req, res) => {
+    try {
+      const userChallengeInfo = await UserChallenge.find({
+        userInfo_id: req.params.userInfoId,
+      });
+
+      if (!userChallengeInfo) {
+        return res.status(404).json({
+          error: 'My challenge not found',
+        });
+      }
+
+      const userChallengeInfoIds = userChallengeInfo.map((info) => info._id);
+
+      res.status(200).json({
+        message: 'My challenge found',
+        userChallengeId: userChallengeInfoIds,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: 'Internal Server Error',
+      });
+    }
+  },
   getMyStatus: async (req, res) => {
     try {
       const userChallengeInfo = await UserChallenge.findById(req.params.userChallengeId);
