@@ -105,6 +105,7 @@ module.exports = {
           challengeVerificationFrequency: challengeInfo.challengeVerificationFrequency,
           challengeStartsAt: challengeInfo.challengeStartsAt,
           challengeEndsAt: challengeInfo.challengeEndsAt,
+          userChallengeId: userChallengeInfo._id,
         },
       });
     } catch (error) {
