@@ -101,6 +101,9 @@ module.exports = {
           successRate: userChallengeInfo.successRate,
           deposit: userChallengeInfo.deposit,
           challengeStatus: challengeInfo.challengeStatus,
+          challengeVerificationFrequency: challengeInfo.challengeVerificationFrequency,
+          challengeStartsAt: challengeInfo.challengeStartsAt,
+          challengeEndsAt: challengeInfo.challengeEndsAt,
         },
       });
     } catch (error) {
