@@ -6,15 +6,23 @@ module.exports = {
     try {
       const userChallengeInfo = req.body;
 
-      const userChallenge = await UserChallenge.findOne({
+      const userChallenge = await UserChallenge.find({
         userInfo_id: userChallengeInfo.userInfoId,
       });
 
+      for (let i = 0; i < userChallenge.length; i++) {
+        if (userChallenge[i].challenge_id === userChallengeInfo.challengeId) {
+          return res.status(409).json({
+            error: 'My challenge already registered',
+          });
+        }
+      }
+
       const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challengeId);
 
-      if (userChallenge) {
-        return res.status(409).json({
-          error: 'My challenge already registered',
+      if (!challengeInfo) {
+        return res.status(404).json({
+          error: 'Challenge not found',
         });
       }
 
