@@ -100,6 +100,7 @@ module.exports = {
           challengeId: challengeInfo._id,
           successRate: userChallengeInfo.successRate,
           deposit: userChallengeInfo.deposit,
+          challengeName: challengeInfo.challengeName,
           challengeStatus: challengeInfo.challengeStatus,
           challengeVerificationFrequency: challengeInfo.challengeVerificationFrequency,
           challengeStartsAt: challengeInfo.challengeStartsAt,
