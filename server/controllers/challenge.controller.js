@@ -13,11 +13,11 @@ module.exports = {
 
       for (let i = 0; i < challengeInfo.length; i++) {
         if (timestamps[i].startsAt > today) {
-          challengeInfo[i].challengeStatus = 'notStarted';
+          challengeInfo[i].challengeStatus = 'onApplication';
         } else if (timestamps[i].endsAt < today) {
-          challengeInfo[i].challengeStatus = 'finished';
+          challengeInfo[i].challengeStatus = 'completed';
         } else {
-          challengeInfo[i].challengeStatus = 'onGoing';
+          challengeInfo[i].challengeStatus = 'ongoing';
         }
       }
 
@@ -104,6 +104,30 @@ module.exports = {
       const challengeInfo = await ChallengeInfo.create(challenge);
       res.status(200).json({
         message: 'Challenge created',
+        challengeInfo: {
+          challengeId: challengeInfo._id,
+          challengeName: challengeInfo.challengeName,
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: 'Internal Server Error',
+      });
+    }
+  },
+  deleteChallengeById: async (req, res) => {
+    try {
+      const challengeInfo = await ChallengeInfo.findByIdAndDelete(req.params.challengeId);
+
+      if (!challengeInfo) {
+        return res.status(404).json({
+          error: 'Challenge not found',
+        });
+      }
+
+      res.status(200).json({
+        message: 'Challenge deleted',
         challengeInfo: {
           challengeId: challengeInfo._id,
           challengeName: challengeInfo.challengeName,

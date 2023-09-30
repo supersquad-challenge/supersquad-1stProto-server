@@ -61,6 +61,21 @@ module.exports = {
       });
     }
   },
+  getAllUsers: async (req, res) => {
+    try {
+      const users = await UserInfo.find();
+
+      res.status(200).json({
+        message: 'All users',
+        users: users,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: 'Internal Server Error',
+      });
+    }
+  },
   getUserInfo: async (req, res) => {
     try {
       const userInfoId = req.params.userInfoId;

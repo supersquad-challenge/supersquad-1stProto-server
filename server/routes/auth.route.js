@@ -8,13 +8,34 @@ router.get(
   '/google',
   passport.authenticate('google', { scope: ['profile', 'email'], session: false })
 );
+
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successReturnToOrRedirect: '/challenge',
+    successReturnToOrRedirect: 'http://localhost:3000/home',
     failureRedirect: '/',
-    session: false,
+    session: true,
   })
 );
+
+router.get('/login', (req, res) => {
+  //console.log(req.session.passport.user);
+  res.status(200).json({
+    message: 'Login successful',
+    userInfoId: req.user.id,
+    email: req.user.email,
+  });
+});
+
+router.post('/logout', (req, res) => {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.status(200).json({
+      message: 'Logout successful',
+    });
+  });
+});
 
 module.exports = router;

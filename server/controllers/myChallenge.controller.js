@@ -6,15 +6,23 @@ module.exports = {
     try {
       const userChallengeInfo = req.body;
 
-      const userChallenge = await UserChallenge.findOne({
+      const userChallenge = await UserChallenge.find({
         userInfo_id: userChallengeInfo.userInfoId,
       });
 
+      for (let i = 0; i < userChallenge.length; i++) {
+        if (userChallenge[i].challenge_id === userChallengeInfo.challengeId) {
+          return res.status(409).json({
+            error: 'My challenge already registered',
+          });
+        }
+      }
+
       const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challengeId);
 
-      if (userChallenge) {
-        return res.status(409).json({
-          error: 'My challenge already registered',
+      if (!challengeInfo) {
+        return res.status(404).json({
+          error: 'Challenge not found',
         });
       }
 
@@ -46,6 +54,31 @@ module.exports = {
       });
     }
   },
+  getAllMychallenge: async (req, res) => {
+    try {
+      const userChallengeInfo = await UserChallenge.find({
+        userInfo_id: req.params.userInfoId,
+      });
+
+      if (!userChallengeInfo) {
+        return res.status(404).json({
+          error: 'My challenge not found',
+        });
+      }
+
+      const userChallengeInfoIds = userChallengeInfo.map((info) => info._id);
+
+      res.status(200).json({
+        message: 'My challenge found',
+        userChallengeId: userChallengeInfoIds,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: 'Internal Server Error',
+      });
+    }
+  },
   getMyStatus: async (req, res) => {
     try {
       const userChallengeInfo = await UserChallenge.findById(req.params.userChallengeId);
@@ -67,7 +100,14 @@ module.exports = {
           challengeId: challengeInfo._id,
           successRate: userChallengeInfo.successRate,
           deposit: userChallengeInfo.deposit,
+          challengeName: challengeInfo.challengeName,
           challengeStatus: challengeInfo.challengeStatus,
+          challengeVerificationFrequency: challengeInfo.challengeVerificationFrequency,
+          challengeStartsAt: challengeInfo.challengeStartsAt,
+          challengeEndsAt: challengeInfo.challengeEndsAt,
+          userChallengeId: userChallengeInfo._id,
+          challengeParticipantsCount: challengeInfo.challengeParticipantsCount,
+          challengeTotalDeposit: challengeInfo.challengeTotalDeposit,
         },
       });
     } catch (error) {
