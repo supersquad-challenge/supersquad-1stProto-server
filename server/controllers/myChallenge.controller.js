@@ -106,6 +106,8 @@ module.exports = {
           challengeStartsAt: challengeInfo.challengeStartsAt,
           challengeEndsAt: challengeInfo.challengeEndsAt,
           userChallengeId: userChallengeInfo._id,
+          challengeParticipantsCount: challengeInfo.challengeParticipantsCount,
+          challengeTotalDeposit: challengeInfo.challengeTotalDeposit,
         },
       });
     } catch (error) {
