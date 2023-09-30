@@ -15,7 +15,7 @@ module.exports = {
         if (timestamps[i].startsAt > today) {
           challengeInfo[i].challengeStatus = 'onApplication';
         } else if (timestamps[i].endsAt < today) {
-          challengeInfo[i].challengeStatus = 'finished';
+          challengeInfo[i].challengeStatus = 'completed';
         } else {
           challengeInfo[i].challengeStatus = 'ongoing';
         }
