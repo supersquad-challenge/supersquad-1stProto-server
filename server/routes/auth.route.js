@@ -12,7 +12,7 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successReturnToOrRedirect: '/auth/login',
+    successReturnToOrRedirect: '/localhost:3000/home',
     failureRedirect: '/',
     session: true,
   })
