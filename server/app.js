@@ -48,8 +48,8 @@ app.use(
   cors({
     origin: [
       'http://localhost:3000',
-      'http://52.65.222.108/',
-      'https://super-squad-liart.vercel.app/',
+      'http://52.65.222.108',
+      'https://super-squad-liart.vercel.app',
     ],
     credentials: true,
   })
