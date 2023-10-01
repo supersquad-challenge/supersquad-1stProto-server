@@ -50,6 +50,7 @@ app.use(
       'http://localhost:3000',
       'http://52.65.222.108',
       'https://super-squad-liart.vercel.app',
+      'https://superssquad.asia',
     ],
     credentials: true,
   })
