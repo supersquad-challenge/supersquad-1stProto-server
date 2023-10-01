@@ -3,11 +3,11 @@ const ChallengeInfo = require('../models/challengeInfo.model');
 module.exports = {
   getChallengeAll: async (req, res) => {
     try {
-      if (!req.cookies['cookie-session']) {
-        return res.status(401).json({
-          error: 'Unauthorized',
-        });
-      }
+      // if (!req.cookies['cookie-session']) {
+      //   return res.status(401).json({
+      //     error: 'Unauthorized',
+      //   });
+      // }
 
       const challengeInfo = await ChallengeInfo.find({});
       //console.log(challengeInfo);
