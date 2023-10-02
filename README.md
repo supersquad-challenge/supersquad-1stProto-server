@@ -1,3 +1,13 @@
+## Supersquad
+
+### The Ultimate Gamified Money Pool Challenge Platform for Crushing Habits and Achieving Your Goals!
+
+Habitica is primarily known for its gamified approach, where users earn rewards and level up their in-game persona as they complete tasks and achieve goals. It leverages the principles of gamification to make habit-building more engaging and enjoyable.
+
+Fabulous, on the other hand, focuses on creating daily routines and rituals to improve overall well-being. It offers a visually appealing interface and provides guided coaching to help users establish healthy habits such as exercise, meditation, and productivity.
+
+Routinery, similar to Fabulous, also emphasizes daily routines and habit formation. It provides users with a structured schedule and reminders to ensure they stay on track with their goals.
+
 ## Supersquad Backend
 
 - ### Stacks
