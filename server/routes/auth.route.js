@@ -12,8 +12,7 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    //successReturnToOrRedirect: 'https://super-squad-liart.vercel.app/home',
-    successReturnToOrRedirect: 'http://localhost:3000/home',
+    successReturnToOrRedirect: 'https://supersquad-proto-front.vercel.app/home',
     failureRedirect: '/',
     session: true,
   })
