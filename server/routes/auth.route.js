@@ -12,7 +12,8 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successReturnToOrRedirect: 'https://supersquad-proto-front.vercel.app/home',
+    successReturnToOrRedirect:
+      'https://supersquad-proto-front-kzewzj80v-chrislees-projects.vercel.app/home',
     failureRedirect: '/',
     session: true,
   })
