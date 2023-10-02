@@ -2,11 +2,8 @@
 
 ### The Ultimate Gamified Money Pool Challenge Platform for Crushing Habits and Achieving Your Goals!
 
-Habitica is primarily known for its gamified approach, where users earn rewards and level up their in-game persona as they complete tasks and achieve goals. It leverages the principles of gamification to make habit-building more engaging and enjoyable.
-
-Fabulous, on the other hand, focuses on creating daily routines and rituals to improve overall well-being. It offers a visually appealing interface and provides guided coaching to help users establish healthy habits such as exercise, meditation, and productivity.
-
-Routinery, similar to Fabulous, also emphasizes daily routines and habit formation. It provides users with a structured schedule and reminders to ensure they stay on track with their goals.
+Tournament Pool based Gamification system
+SuperSquad stands out by combining the concept of habit-building with a money pool challenge. You can put your money on a challenge pool and prove that they have completed your daily routine. If you are successful, not only save you principal but also earn extra yield from Defi protocols. Additionally, SuperSquad offers ranking-based tournament pools where winners can earn even greater rewards. This gamification system effectively motivates participants to stick to their routines and achieve their goals.
 
 ## Supersquad Backend
 
