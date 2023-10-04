@@ -50,6 +50,9 @@ app.use(
       'http://localhost:3000',
       'http://52.65.222.108',
       'https://super-squad-liart.vercel.app',
+      'https://supersquad.asia',
+      'https://supersquad-proto-front.vercel.app',
+      'https://supersquad-proto-front-kzewzj80v-chrislees-projects.vercel.app',
     ],
     credentials: true,
   })
