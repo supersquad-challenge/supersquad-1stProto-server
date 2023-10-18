@@ -17,8 +17,8 @@ app.use(
     keys: [process.env.SESSION_SECRET],
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 1 month
     //domain: 'supersquad-proto-front.vercel.app',
-    sameSite: 'None',
-    secure: true,
+    sameSite: 'lax',
+    // secure: true,
   })
 );
 
