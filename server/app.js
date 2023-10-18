@@ -15,12 +15,12 @@ require('dotenv').config();
 
 app.use(
   cookieSession({
-    name: 'cookie-session3',
+    name: 'cookie-session4',
     keys: [process.env.SESSION_SECRET],
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 1 month
     //domain: 'supersquad-proto-front.vercel.app',
     sameSite: 'none',
-    secure: false,
+    secure: true,
   })
 );
 
