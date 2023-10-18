@@ -9,6 +9,8 @@ const cookieSession = require('cookie-session');
 const mongoose = require('mongoose');
 const passport = require('passport');
 
+const morgan = require('morgan');
+
 require('dotenv').config();
 
 app.use(
