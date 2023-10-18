@@ -14,6 +14,7 @@ module.exports = {
         if (userChallenge[i].challenge_id === userChallengeInfo.challengeId) {
           return res.status(409).json({
             error: 'My challenge already registered',
+            userChallengeId: userChallenge[i]._id,
           });
         }
       }
