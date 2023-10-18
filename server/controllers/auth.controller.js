@@ -8,7 +8,7 @@ const googleClientID = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 
 passport.serializeUser((user, done) => {
-  //console.log('serializeUser', user);
+  console.log('serializeUser', user);
   done(null, user.id);
 });
 
