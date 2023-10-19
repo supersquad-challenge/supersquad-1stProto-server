@@ -61,6 +61,7 @@ app.use(
       'http://localhost:3000',
       'https://supersquad-proto-front.vercel.app',
       'https://supersquad.site',
+      'https://proto.supersquad.site',
     ],
     credentials: true,
   })
