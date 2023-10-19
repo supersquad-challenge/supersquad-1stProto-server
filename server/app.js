@@ -21,6 +21,7 @@ app.use(
     // domain: 'supersquad.site',
     sameSite: 'none',
     secure: true,
+    proxy: true,
   })
 );
 
