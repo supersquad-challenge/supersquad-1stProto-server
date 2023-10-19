@@ -15,13 +15,13 @@ require('dotenv').config();
 
 app.use(
   cookieSession({
-    name: 'cookie-session5',
+    name: 'cookie-session6',
     keys: [process.env.SESSION_SECRET],
+    proxy: true,
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 1 month
     // domain: 'supersquad.site',
-    // sameSite: 'none',
-    // secure: false,
-    proxy: true,
+    sameSite: 'none',
+    secure: true,
   })
 );
 
