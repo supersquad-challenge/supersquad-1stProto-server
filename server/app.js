@@ -3,7 +3,6 @@ const app = express();
 const routes = require('./routes');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const path = require('path');
 const cookieSession = require('cookie-session');
 
 const mongoose = require('mongoose');
@@ -19,9 +18,6 @@ app.use(
     keys: [process.env.SESSION_SECRET],
     proxy: true,
     expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 1 month
-    // domain: 'supersquad-proto-front.vercel.app',
-    // sameSite: 'none',
-    // secure: true,
   })
 );
 
@@ -57,12 +53,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: [
-      'http://localhost:3000',
-      'https://supersquad-proto-front.vercel.app',
-      'https://supersquad.site',
-      'https://proto.supersquad.site',
-    ],
+    origin: ['http://localhost:3000', 'https://proto.supersquad.site'],
     credentials: true,
   })
 );

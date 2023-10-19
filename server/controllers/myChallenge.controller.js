@@ -1,5 +1,6 @@
 const ChallengeInfo = require('../models/challengeInfo.model');
 const UserChallenge = require('../models/userChallenge.model');
+const VerificationPhoto = require('../models/verificationPhoto.model');
 
 module.exports = {
   registerMyChallenge: async (req, res) => {
@@ -61,17 +62,36 @@ module.exports = {
         userInfo_id: req.params.userInfoId,
       });
 
+      const userChallengeIds = userChallengeInfo.map((info) => info._id);
+
       if (!userChallengeInfo) {
         return res.status(404).json({
           error: 'My challenge not found',
         });
       }
 
-      const userChallengeInfoIds = userChallengeInfo.map((info) => info._id);
+      const getChallengeInfoByIds = async (ids) => {
+        try {
+          const challengeInfo = await ChallengeInfo.find({ _id: { $in: ids } }); // ids에 해당하는 challenge 정보를 조회합니다.
+          return challengeInfo;
+        } catch (err) {
+          console.error(err);
+          throw new Error('Failed to get challenge info');
+        }
+      };
+
+      const challengeIds = userChallengeInfo.map((info) => info.challenge_id);
+      const challengeInfo = await getChallengeInfoByIds(challengeIds);
+      //console.log(challengeInfo);
+
+      const response = challengeInfo.map((info, index) => ({
+        ...info.toObject(),
+        userChallengeId: userChallengeIds[index],
+      }));
 
       res.status(200).json({
         message: 'My challenge found',
-        userChallengeId: userChallengeInfoIds,
+        challengeInfo: response,
       });
     } catch (error) {
       console.log(error);
@@ -115,9 +135,12 @@ module.exports = {
       }
 
       const challengeInfo = await ChallengeInfo.findById(userChallengeInfo.challenge_id);
+      const verificationPhotoInfo = await VerificationPhoto.find({
+        userChallenge_id: req.params.userChallengeId,
+      });
 
-      //console.log(userChallengeInfo);
-      //console.log(challengeInfo);
+      const callDate = new Date();
+      //console.log(callDate);
 
       res.status(200).json({
         message: 'My status found',
@@ -284,6 +307,47 @@ module.exports = {
           },
         });
       }
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({
+        error: 'Internal Server Error',
+      });
+    }
+  },
+  getVerifyPhoto: async (req, res) => {
+    try {
+      const { userChallengeId } = req.params;
+      const verifyPhotos = await VerificationPhoto.find({
+        userChallenge_id: userChallengeId,
+      });
+
+      if (!verifyPhotos || verifyPhotos.length === 0) {
+        return res.status(404).json({
+          error: 'Verification Photo not found',
+        });
+      }
+
+      const currentDate = new Date();
+      let isUploaded = false;
+
+      for (const verifyPhoto of verifyPhotos) {
+        const uploadedDate = new Date(verifyPhoto.uploadedAt);
+        const timezoneOffset = uploadedDate.getTimezoneOffset() * 60 * 1000;
+        const convertedUploadedDate = new Date(uploadedDate.getTime() - timezoneOffset);
+
+        if (
+          currentDate.getMonth() === convertedUploadedDate.getMonth() &&
+          currentDate.getDate() === convertedUploadedDate.getDate()
+        ) {
+          isUploaded = true;
+          break;
+        }
+      }
+
+      res.status(200).json({
+        message: 'Verification Photo found',
+        isUploaded,
+      });
     } catch (error) {
       console.log(error);
       res.status(500).json({
