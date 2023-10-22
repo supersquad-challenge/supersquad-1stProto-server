@@ -3,10 +3,10 @@ const UserInfo = require('../models/userInfo.model');
 module.exports = {
   registerUserName: async (req, res) => {
     try {
-      const { email, nickname } = req.body;
+      const { userInfoId, nickname } = req.body;
 
-      const updateUser = await UserInfo.findOneAndUpdate(
-        { email: email },
+      const updateUser = await UserInfo.findByIdAndUpdate(
+        userInfoId,
         { $set: { nickname: nickname } },
         { new: true }
       );
@@ -33,10 +33,10 @@ module.exports = {
   },
   registerAddress: async (req, res) => {
     try {
-      const { email, address } = req.body;
+      const { userInfoId, address } = req.body;
 
-      const updateUser = await UserInfo.findOneAndUpdate(
-        { email: email },
+      const updateUser = await UserInfo.findByIdAndUpdate(
+        userInfoId,
         { $set: { address: address } },
         { new: true }
       );
@@ -48,7 +48,7 @@ module.exports = {
       }
 
       res.status(200).json({
-        message: 'User nickname update',
+        message: 'User wallet address update',
         userInfo: {
           userInfoId: updateUser._id,
           address: updateUser.address,

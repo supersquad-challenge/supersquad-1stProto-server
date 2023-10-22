@@ -19,15 +19,15 @@ module.exports = {
         endsAt: new Date(info.challengeEndsAt).getTime(),
       }));
 
-      for (let i = 0; i < challengeInfo.length; i++) {
-        if (timestamps[i].startsAt > today) {
-          challengeInfo[i].challengeStatus = 'onApplication';
-        } else if (timestamps[i].endsAt < today) {
-          challengeInfo[i].challengeStatus = 'completed';
-        } else {
-          challengeInfo[i].challengeStatus = 'ongoing';
-        }
-      }
+      // for (let i = 0; i < challengeInfo.length; i++) {
+      //   if (timestamps[i].startsAt > today) {
+      //     challengeInfo[i].challengeStatus = 'onApplication';
+      //   } else if (timestamps[i].endsAt < today) {
+      //     challengeInfo[i].challengeStatus = 'completed';
+      //   } else {
+      //     challengeInfo[i].challengeStatus = 'ongoing';
+      //   }
+      // }
 
       const updateOps = challengeInfo.map((info) => ({
         updateOne: {
@@ -50,6 +50,7 @@ module.exports = {
         challengeEndsAt: info.challengeEndsAt,
         challengeParticipantsCount: info.challengeParticipantsCount,
         challengeTotalDeposit: info.challengeTotalDeposit,
+        poolAddress: info.poolAddress,
       }));
 
       res.status(200).json({
@@ -87,6 +88,7 @@ module.exports = {
           challengeEndsAt: challengeInfo.challengeEndsAt,
           challengeVerificationMethod: challengeInfo.challengeVerificationMethod,
           cryptoYield: challengeInfo.cryptoYield,
+          poolAddress: challengeInfo.poolAddress,
         },
       });
     } catch (error) {
