@@ -27,8 +27,8 @@ const googleStrategyConfig = new GoogleStrategy(
   {
     clientID: googleClientID,
     clientSecret: googleClientSecret,
-    callbackURL: 'https://supersquad-nine.vercel.app/auth/google/callback',
-    // callbackURL: '/auth/google/callback',
+    //callbackURL: 'https://supersquad-nine.vercel.app/auth/google/callback',
+    callbackURL: '/auth/google/callback',
     scope: ['profile', 'email'],
   },
   async (accessToken, refreshToken, profile, done) => {
