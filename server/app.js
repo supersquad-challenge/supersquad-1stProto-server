@@ -53,7 +53,11 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ['http://localhost:3000', 'https://proto.supersquad.site'],
+    origin: [
+      'http://localhost:3000',
+      'https://proto.supersquad.site',
+      'https://supersquad-nine.vercel.app',
+    ],
     credentials: true,
   })
 );
