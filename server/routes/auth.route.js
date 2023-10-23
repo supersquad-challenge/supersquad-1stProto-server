@@ -12,8 +12,8 @@ router.get(
 router.get(
   '/google/callback',
   passport.authenticate('google', {
-    successReturnToOrRedirect: 'https://proto.supersquad.site/home',
-    // successReturnToOrRedirect: 'http://localhost:3000/home',
+    successReturnToOrRedirect: 'https://proto.supersquad.site',
+    // successReturnToOrRedirect: 'http://localhost:3000',
     failureRedirect: '/',
     session: true,
   })
