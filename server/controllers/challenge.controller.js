@@ -51,7 +51,6 @@ module.exports = {
         challengeParticipantsCount: info.challengeParticipantsCount,
         challengeTotalDeposit: info.challengeTotalDeposit,
         poolAddress: info.poolAddress,
-        description: info.description,
       }));
 
       res.status(200).json({
@@ -90,6 +89,7 @@ module.exports = {
           challengeVerificationMethod: challengeInfo.challengeVerificationMethod,
           cryptoYield: challengeInfo.cryptoYield,
           poolAddress: challengeInfo.poolAddress,
+          description: challengeInfo.description,
         },
       });
     } catch (error) {
