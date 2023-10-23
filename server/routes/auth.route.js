@@ -13,7 +13,7 @@ router.get(
   '/google/callback',
   passport.authenticate('google', {
     //successReturnToOrRedirect: 'https://proto.supersquad.site',
-    successReturnToOrRedirect: 'https://supersquad-nine.vercel.app/challenge',
+    successReturnToOrRedirect: 'https://supersquad.site/challenge',
     // successReturnToOrRedirect: 'http://localhost:3000',
     failureRedirect: '/',
     session: true,
