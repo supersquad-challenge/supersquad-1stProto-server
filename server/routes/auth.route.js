@@ -27,6 +27,7 @@ router.get('/login', (req, res) => {
     userInfoId: req.user.id,
     email: req.user.email,
     picture: req.user.picture,
+    nickname: req.user.nickname,
   });
 });
 
