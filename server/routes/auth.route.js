@@ -26,6 +26,7 @@ router.get('/login', (req, res) => {
     message: 'Login successful',
     userInfoId: req.user.id,
     email: req.user.email,
+    picture: req.user.picture,
   });
 });
 
